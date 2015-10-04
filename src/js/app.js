@@ -2,6 +2,12 @@
  * Main application code.
  */
 
+Pebble.addEventListener('ready',
+  function (e) {
+    console.log("ready from rrrrrr");
+  }
+);
+
 // TODO: Support location setting
 var LOCATION = "Melbourne";
 
