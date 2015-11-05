@@ -31,6 +31,10 @@
             }
         ]
     },
+    "targetPlatforms": [
+        "basalt",
+        "chalk"
+    ],
     "sdkVersion": "3",
     "shortName": "UV Alert",
     "uuid": "353a03cf-93ce-4256-afa1-627fb5100935",
