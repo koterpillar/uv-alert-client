@@ -2,8 +2,9 @@
  * Main application code.
  */
 
-// TODO: Support location setting
-var LOCATION = "Melbourne";
+var ajax = require('ajax');
+var Settings = require('settings');
+var UI = require('ui');
 
 function pass() {}
 
@@ -13,7 +14,18 @@ function logError(where) {
   };
 }
 
-function setLocationSubscription(loc) {
+function getLocation() {
+  return Settings.option('location');
+}
+
+function setLocation(value) {
+  Settings.option('location', value);
+  updateLocationSubscription();
+  main.subtitle(value);
+}
+
+function updateLocationSubscription() {
+  var loc = getLocation();
   Pebble.timelineSubscriptions(
     function (topics) {
       var haveSubscription = false;
@@ -35,15 +47,41 @@ function setLocationSubscription(loc) {
   );
 }
 
-var ajax = require('ajax');
-var UI = require('ui');
-
 var main = new UI.Card({
   title: 'UV Alert',
-  subtitle: 'Useless screen',
-  body: 'Press any button.'
+  subtitle: getLocation(),
+  body: 'Use the timeline to view alerts.',
+  action: {
+    select: 'images/select-location.png'
+  }
+});
+
+main.on('click', 'select', function () {
+  // TODO: Load locations from the server
+  var locationSelect = new UI.Menu({
+    sections: [{
+      title: "Select Location",
+      items: [
+        {
+          title: "Melbourne"
+        },
+        {
+          title: "Sydney"
+        }
+      ]
+    }]
+  });
+  locationSelect.on('select', function (e) {
+    var loc = e.item.title;
+    setLocation(loc);
+    locationSelect.hide();
+  });
+  locationSelect.show();
 });
 
 main.show();
 
-setLocationSubscription(LOCATION);
+// Default location
+if (!getLocation()) {
+  setLocation("Melbourne");
+}

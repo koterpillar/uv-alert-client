@@ -25,6 +25,11 @@
                 "type": "png"
             },
             {
+                "file": "images/select-location.png",
+                "name": "IMAGE_SELECT_LOCATION",
+                "type": "png"
+            },
+            {
                 "file": "fonts/UbuntuMono-Regular.ttf",
                 "name": "MONO_FONT_14",
                 "type": "font"
