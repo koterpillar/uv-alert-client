@@ -1,0 +1,3 @@
+[submodule "pebblejs"]
+	path = pebblejs
+	url = https://github.com/pebble/pebblejs.git
