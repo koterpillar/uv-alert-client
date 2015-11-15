@@ -30,6 +30,11 @@
                 "type": "png"
             },
             {
+                "file": "images/info.png",
+                "name": "IMAGE_INFO",
+                "type": "png"
+            },
+            {
                 "file": "fonts/UbuntuMono-Regular.ttf",
                 "name": "MONO_FONT_14",
                 "type": "font"
