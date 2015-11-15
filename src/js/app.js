@@ -2,6 +2,8 @@
  * Main application code.
  */
 
+var SERVER_URL = 'https://uvalert.koterpillar.com';
+
 var ajax = require('ajax');
 var Settings = require('settings');
 var UI = require('ui');
@@ -9,9 +11,28 @@ var UI = require('ui');
 function pass() {}
 
 function logError(where) {
-  return function (errorString) {
+  return function () {
+    var errorString = Array.prototype.slice.call(arguments).join(", ");
     console.log("Error: " + where + ": " + errorString);
   };
+}
+
+function getLocationList(callback) {
+  if (Settings.option('locations')) {
+    callback(Settings.option('locations'));
+  } else {
+    ajax(
+      {
+        url: SERVER_URL + '/locations',
+        type: 'json'
+      },
+      function (locations, status_, request) {
+        Settings.option('locations', locations);
+        getLocationList(callback);
+      },
+      logError("getLocationList")
+    );
+  }
 }
 
 function getLocation() {
@@ -57,26 +78,20 @@ var main = new UI.Card({
 });
 
 main.on('click', 'select', function () {
-  // TODO: Load locations from the server
-  var locationSelect = new UI.Menu({
-    sections: [{
-      title: "Select Location",
-      items: [
-        {
-          title: "Melbourne"
-        },
-        {
-          title: "Sydney"
-        }
-      ]
-    }]
+  getLocationList(function (locations) {
+    var locationSelect = new UI.Menu({
+      sections: [{
+        title: "Select Location",
+        items: locations
+      }]
+    });
+    locationSelect.on('select', function (e) {
+      var loc = e.item.title;
+      setLocation(loc);
+      locationSelect.hide();
+    });
+    locationSelect.show();
   });
-  locationSelect.on('select', function (e) {
-    var loc = e.item.title;
-    setLocation(loc);
-    locationSelect.hide();
-  });
-  locationSelect.show();
 });
 
 main.show();
