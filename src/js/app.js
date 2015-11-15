@@ -4,6 +4,8 @@
 
 var SERVER_URL = 'https://uvalert.koterpillar.com';
 
+var LOCATION_MAX_AGE = 60 * 60 * 24; // seconds
+
 var ajax = require('ajax');
 var Settings = require('settings');
 var UI = require('ui');
@@ -18,15 +20,21 @@ function logError(where) {
 }
 
 function getLocationList(callback) {
-  if (Settings.option('locations')) {
-    callback(Settings.option('locations'));
+  var locations = Settings.option('locations');
+  if (locations && locations.timestamp &&
+      locations.timestamp >= (new Date()).getTime() - LOCATION_MAX_AGE) {
+    callback(locations.data);
   } else {
     ajax(
       {
         url: SERVER_URL + '/locations',
         type: 'json'
       },
-      function (locations, status_, request) {
+      function (data, status_, request) {
+        locations = {
+          data: data,
+          timestamp: (new Date()).getTime()
+        };
         Settings.option('locations', locations);
         getLocationList(callback);
       },
@@ -79,10 +87,15 @@ var main = new UI.Card({
 
 main.on('click', 'select', function () {
   getLocationList(function (locations) {
+    var items = locations.map(function (loc) {
+      return {
+        title: loc.city
+      };
+    });
     var locationSelect = new UI.Menu({
       sections: [{
         title: "Select Location",
-        items: locations
+        items: items
       }]
     });
     locationSelect.on('select', function (e) {
