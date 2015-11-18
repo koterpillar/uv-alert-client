@@ -90,7 +90,12 @@ var main = new UI.Card({
 
 main.on('click', 'select', function () {
   getLocationList(function (locations) {
-    var items = locations.map(function (loc) {
+    var selected = getLocation();
+    var selectedIndex = 0; // default to first element
+    var items = locations.map(function (loc, i) {
+      if (loc.city == selected) {
+        selectedIndex = i;
+      }
       return {
         title: loc.city
       };
@@ -101,6 +106,7 @@ main.on('click', 'select', function () {
         items: items
       }]
     });
+    locationSelect.setSelection(0, selectedIndex);
     locationSelect.on('select', function (e) {
       var loc = e.item.title;
       setLocation(loc);
