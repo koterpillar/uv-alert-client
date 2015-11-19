@@ -106,7 +106,7 @@ main.on('click', 'select', function () {
         items: items
       }]
     });
-    locationSelect.setSelection(0, selectedIndex);
+    locationSelect.selection(0, selectedIndex);
     locationSelect.on('select', function (e) {
       var loc = e.item.title;
       setLocation(loc);
