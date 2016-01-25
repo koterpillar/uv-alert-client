@@ -4,8 +4,6 @@
 
 var SERVER_URL = 'https://uvalert.koterpillar.com';
 
-var BOM_INFO_URL = 'http://www.bom.gov.au/data-access/3rd-party-attribution.shtml';
-
 var LOCATION_MAX_AGE = 60 * 60 * 24; // seconds
 
 var ajax = require('ajax');
@@ -119,8 +117,7 @@ main.on('click', 'select', function () {
 main.on('click', 'up', function () {
   var dataInfo = new UI.Card({
     title: "Data Information",
-    body: "Some data on this app. is sourced from the Buerau of Meteorology." +
-      "\n" + BOM_INFO_URL,
+    body: "UV observations courtesy of ARPANSA.",
     scrollable: true
   });
 
