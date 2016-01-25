@@ -1,57 +1,58 @@
 {
-    "appKeys": {},
-    "capabilities": [
-        ""
-    ],
-    "companyName": "Koterpillar",
-    "longName": "UV Alert",
-    "projectType": "pebblejs",
-    "resources": {
-        "media": [
-            {
-                "file": "images/icon48.png",
-                "menuIcon": true,
-                "name": "IMAGE_MENU_ICON",
-                "type": "png"
-            },
-            {
-                "file": "images/icon48.png",
-                "name": "IMAGE_LOGO_SPLASH",
-                "type": "png"
-            },
-            {
-                "file": "images/tile_splash.png",
-                "name": "IMAGE_TILE_SPLASH",
-                "type": "png"
-            },
-            {
-                "file": "images/select-location.png",
-                "name": "IMAGE_SELECT_LOCATION",
-                "type": "png"
-            },
-            {
-                "file": "images/info.png",
-                "name": "IMAGE_INFO",
-                "type": "png"
-            },
-            {
-                "file": "fonts/UbuntuMono-Regular.ttf",
-                "name": "MONO_FONT_14",
-                "type": "font"
-            }
-        ]
-    },
-    "targetPlatforms": [
-        "basalt",
-        "chalk"
-    ],
-    "sdkVersion": "3",
-    "shortName": "UV Alert",
-    "uuid": "353a03cf-93ce-4256-afa1-627fb5100935",
-    "versionCode": 1,
-    "versionLabel": "1.0",
-    "watchapp": {
-        "hiddenApp": false,
-        "watchface": false
-    }
+  "appKeys": {},
+  "capabilities": [
+    ""
+  ],
+  "companyName": "Koterpillar",
+  "longName": "UV Alert",
+  "projectType": "pebblejs",
+  "resources": {
+    "media": [
+      {
+        "file": "images/icon48.png",
+        "menuIcon": true,
+        "name": "IMAGE_MENU_ICON",
+        "type": "png"
+      },
+      {
+        "file": "images/icon48.png",
+        "name": "IMAGE_LOGO_SPLASH",
+        "type": "png"
+      },
+      {
+        "file": "images/tile_splash.png",
+        "name": "IMAGE_TILE_SPLASH",
+        "type": "png"
+      },
+      {
+        "file": "images/select-location.png",
+        "name": "IMAGE_SELECT_LOCATION",
+        "type": "png"
+      },
+      {
+        "file": "images/info.png",
+        "name": "IMAGE_INFO",
+        "type": "png"
+      },
+      {
+        "file": "fonts/UbuntuMono-Regular.ttf",
+        "name": "MONO_FONT_14",
+        "type": "font"
+      }
+    ]
+  },
+  "sdkVersion": "3",
+  "shortName": "UV Alert",
+  "targetPlatforms": [
+    "aplite",
+    "basalt",
+    "chalk"
+  ],
+  "uuid": "353a03cf-93ce-4256-afa1-627fb5100935",
+  "versionCode": 1,
+  "versionLabel": "1.0",
+  "watchapp": {
+    "hiddenApp": false,
+    "watchface": false
+  }
 }
