@@ -130,7 +130,10 @@ main.on('click', 'up', function () {
 
 main.show();
 
-// Default location
 if (!getLocation()) {
+  // Default location
   setLocation("Melbourne");
+} else {
+  // Ensure the subscriptions are in sync with the location
+  updateLocationSubscription();
 }
