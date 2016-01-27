@@ -66,10 +66,10 @@ function updateLocationSubscription() {
           Pebble.timelineUnsubscribe(
               topics[i], pass, logError('timelineUnsubscribe'));
         }
+      }
 
-        if (!haveSubscription) {
-          Pebble.timelineSubscribe(loc, pass, logError('timelineSubscribe'));
-        }
+      if (!haveSubscription) {
+        Pebble.timelineSubscribe(loc, pass, logError('timelineSubscribe'));
       }
     },
     logError('timelineSubscriptions')
