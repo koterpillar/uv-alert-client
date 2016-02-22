@@ -6,6 +6,24 @@ var SERVER_URL = 'https://uvalert.koterpillar.com';
 
 var LOCATION_MAX_AGE = 60 * 60 * 24; // seconds
 
+var INFO_TEXT = [
+  "This program is free software: you can redistribute it and/or modify",
+  "it under the terms of the GNU General Public License as published by",
+  "the Free Software Foundation, either version 3 of the License, or",
+  "(at your option) any later version.",
+  "",
+  "This program is distributed in the hope that it will be useful,",
+  "but WITHOUT ANY WARRANTY; without even the implied warranty of",
+  "MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the",
+  "GNU General Public License for more details.",
+  "",
+  "You should have received a copy of the GNU General Public License",
+  "along with this program.  If not, see <http://www.gnu.org/licenses/>.",
+  "",
+  "Australian UV observations courtesy of ARPANSA.",
+  ""
+].join(" ").replace("\n\n");
+
 var ajax = require('ajax');
 var Settings = require('settings');
 var UI = require('ui');
@@ -116,8 +134,8 @@ main.on('click', 'select', function () {
 
 main.on('click', 'up', function () {
   var dataInfo = new UI.Card({
-    title: "Data Information",
-    body: "UV observations courtesy of ARPANSA.",
+    title: "UV Alert for Pebble",
+    body: INFO_TEXT,
     scrollable: true
   });
 
