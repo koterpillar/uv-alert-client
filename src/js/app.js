@@ -21,6 +21,8 @@ var INFO_TEXT = [
   "along with this program.  If not, see <http://www.gnu.org/licenses/>.",
   "",
   "Australian UV observations courtesy of ARPANSA.",
+  "",
+  "USA UV observations courtesy of EPA.",
   ""
 ].join(" ").replace("\n\n");
 
@@ -61,42 +63,74 @@ function getLocationList(callback) {
   }
 }
 
-function getLocation() {
-  return Settings.option('location');
+function getLocation(callback) {
+  var loc = Settings.option('location');
+  if (typeof(loc) == 'string') {
+    // Old location, find it in the location list and replace
+    getLocationList(function (locations) {
+      for (var i = 0; i < locations.length; i++) {
+        if (locations[i].city == loc) {
+          callback(locations[i]);
+        }
+      }
+      callback(null);
+    });
+  } else {
+    callback(loc);
+  }
+}
+
+function locationTitle(loc) {
+  if (typeof(loc) == 'string') {
+    // Old location, it will be reset once selected via menu
+    return loc;
+  }
+  return loc.city + ", " + loc.region;
 }
 
 function setLocation(value) {
   Settings.option('location', value);
   updateLocationSubscription();
-  main.subtitle(value);
+  main.subtitle(locationTitle(value));
+}
+
+function locationEqual(loc1, loc2) {
+  return loc1.country == loc2.country &&
+    loc1.region == loc2.region &&
+    loc1.city == loc2.city;
 }
 
 function updateLocationSubscription() {
-  var loc = getLocation();
-  Pebble.timelineSubscriptions(
-    function (topics) {
-      var haveSubscription = false;
+  getLocation(function (loc) {
+    if (!loc) {
+      return;
+    }
+    var locTopic = "v2-" + loc.country + "-" + loc.region + "-" + loc.city;
+    Pebble.timelineSubscriptions(
+      function (topics) {
+        var haveSubscription = false;
 
-      for (var i = 0; i < topics.length; i++) {
-        if (topics[i] == loc) {
-          haveSubscription = true;
-        } else {
-          Pebble.timelineUnsubscribe(
-              topics[i], pass, logError('timelineUnsubscribe'));
+        for (var i = 0; i < topics.length; i++) {
+          if (topics[i] == locTopic) {
+            haveSubscription = true;
+          } else {
+            Pebble.timelineUnsubscribe(
+                topics[i], pass, logError('timelineUnsubscribe'));
+          }
         }
-      }
 
-      if (!haveSubscription) {
-        Pebble.timelineSubscribe(loc, pass, logError('timelineSubscribe'));
-      }
-    },
-    logError('timelineSubscriptions')
-  );
+        if (!haveSubscription) {
+          Pebble.timelineSubscribe(locTopic, pass, logError('timelineSubscribe'));
+        }
+      },
+      logError('timelineSubscriptions')
+    );
+  });
 }
 
 var main = new UI.Card({
   title: "UV Alert",
-  subtitle: getLocation(),
+  subtitle: "",
   body: "Use the timeline to view alerts.",
   action: {
     select: 'images/select-location.png',
@@ -104,33 +138,37 @@ var main = new UI.Card({
   }
 });
 
-main.on('click', 'select', function () {
+function selectLocation() {
   getLocationList(function (locations) {
-    var selected = getLocation();
-    var selectedIndex = 0; // default to first element
-    var items = locations.map(function (loc, i) {
-      if (loc.city == selected) {
-        selectedIndex = i;
-      }
-      return {
-        title: loc.city
-      };
+    getLocation(function (selected) {
+      var selectedIndex = 0; // default to first element
+      var items = locations.map(function (loc, i) {
+        if (locationEqual(loc, selected)) {
+          selectedIndex = i;
+        }
+        return {
+          title: loc.city,
+          subtitle: loc.region + ", " + loc.country
+        };
+      });
+      var locationSelect = new UI.Menu({
+        sections: [{
+          title: "Select Location",
+          items: items
+        }]
+      });
+      locationSelect.selection(0, selectedIndex);
+      locationSelect.on('select', function (e) {
+        var loc = locations[e.itemIndex];
+        setLocation(loc);
+        locationSelect.hide();
+      });
+      locationSelect.show();
     });
-    var locationSelect = new UI.Menu({
-      sections: [{
-        title: "Select Location",
-        items: items
-      }]
-    });
-    locationSelect.selection(0, selectedIndex);
-    locationSelect.on('select', function (e) {
-      var loc = e.item.title;
-      setLocation(loc);
-      locationSelect.hide();
-    });
-    locationSelect.show();
   });
-});
+}
+
+main.on('click', 'select', selectLocation);
 
 main.on('click', 'up', function () {
   var dataInfo = new UI.Card({
@@ -148,10 +186,19 @@ main.on('click', 'up', function () {
 
 main.show();
 
-if (!getLocation()) {
-  // Default location
-  setLocation("Melbourne");
-} else {
+getLocation(function (loc) {
+  if (!loc) {
+    // Default location
+    loc = {
+      city: "Melbourne",
+      region: "Victoria",
+      country: "Australia"
+    };
+    setLocation(loc);
+  }
+
   // Ensure the subscriptions are in sync with the location
   updateLocationSubscription();
-}
+
+  main.subtitle(locationTitle(loc));
+});
