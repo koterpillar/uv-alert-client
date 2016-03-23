@@ -138,32 +138,66 @@ var main = new UI.Card({
   }
 });
 
+// An array of all the attribute values in an object list
+function _attrSet(objects, attribute) {
+  var resultDict = {};
+  objects.forEach(function (obj) {
+    resultDict[obj[attribute]] = true;
+  });
+
+  var result = [];
+  for (var item in resultDict) {
+    result.push(item);
+  }
+
+  result.sort();
+  return result;
+}
+
+function _filterLocationPart(
+    locations,
+    selected,
+    part,
+    callback
+) {
+  var partSet = _attrSet(locations, part);
+  var selectedIndex = 0; // default to first element
+  var items = partSet.map(function (partItem, i) {
+    if (partItem == selected[part]) {
+      selectedIndex = i;
+    }
+    return {
+      title: partItem
+    };
+  });
+  var locationSelect = new UI.Menu({
+    sections: [{
+      title: "Select Location",
+      items: items
+    }]
+  });
+  locationSelect.selection(0, selectedIndex);
+  locationSelect.on('select', function (e) {
+    var filtered = locations.filter(function (loc) {
+      return loc[part] == e.item.title;
+    });
+    callback(filtered);
+    locationSelect.hide();
+  });
+  locationSelect.show();
+}
+
 function selectLocation() {
   getLocationList(function (locations) {
     getLocation(function (selected) {
-      var selectedIndex = 0; // default to first element
-      var items = locations.map(function (loc, i) {
-        if (locationEqual(loc, selected)) {
-          selectedIndex = i;
-        }
-        return {
-          title: loc.city,
-          subtitle: loc.region + ", " + loc.country
-        };
+      _filterLocationPart(locations, selected, 'country', function (loc1) {
+        _filterLocationPart(loc1, selected, 'region', function (loc2) {
+          _filterLocationPart(loc2, selected, 'city', function (loc3) {
+            var newSelected = loc3[0];
+            setLocation(newSelected);
+          });
+        });
       });
-      var locationSelect = new UI.Menu({
-        sections: [{
-          title: "Select Location",
-          items: items
-        }]
-      });
-      locationSelect.selection(0, selectedIndex);
-      locationSelect.on('select', function (e) {
-        var loc = locations[e.itemIndex];
-        setLocation(loc);
-        locationSelect.hide();
-      });
-      locationSelect.show();
     });
   });
 }
