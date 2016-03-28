@@ -164,7 +164,7 @@ function _filterLocationPart(
   var partSet = _attrSet(locations, part);
   var selectedIndex = 0; // default to first element
   var items = partSet.map(function (partItem, i) {
-    if (partItem == selected[part]) {
+    if (selected && partItem == selected[part]) {
       selectedIndex = i;
     }
     return {
@@ -222,18 +222,13 @@ main.on('click', 'up', function () {
 main.show();
 
 getLocation(function (loc) {
-  if (!loc) {
-    // Default location
-    loc = {
-      city: "Melbourne",
-      region: "Victoria",
-      country: "Australia"
-    };
-    setLocation(loc);
+  if (loc) {
+    main.subtitle(locationTitle(loc));
+  } else {
+    main.subtitle("Press Select to choose location");
+    selectLocation();
   }
 
   // Ensure the subscriptions are in sync with the location
   updateLocationSubscription();
-
-  main.subtitle(locationTitle(loc));
 });
