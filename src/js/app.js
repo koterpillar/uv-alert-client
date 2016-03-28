@@ -106,6 +106,7 @@ function updateLocationSubscription() {
       return;
     }
     var locTopic = "v2-" + loc.country + "-" + loc.region + "-" + loc.city;
+    locTopic = locTopic.replace(/ /g, "_");
     Pebble.timelineSubscriptions(
       function (topics) {
         var haveSubscription = false;
