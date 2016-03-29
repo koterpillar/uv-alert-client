@@ -7,6 +7,14 @@ var SERVER_URL = 'https://uvalert.koterpillar.com';
 var LOCATION_MAX_AGE = 60 * 60 * 24; // seconds
 
 var INFO_TEXT = [
+  "UV index is a measure of the strength of sun's ultraviolet radiation.",
+  "UV index is 3 or above requires using protective clothing, wearing a ",
+  "wide-brimmed hat, UV-blocking sunglasses and SPF 30+ sunscreen.",
+  "",
+  "Once you select your location, UV Alert will provide pins on the timeline ",
+  "each day to tell you when the UV level is 3 or above, and therefore you ",
+  "should protect yourself from the UV radiation.",
+  "",
   "This program is free software: you can redistribute it and/or modify",
   "it under the terms of the GNU General Public License as published by",
   "the Free Software Foundation, either version 3 of the License, or",
@@ -132,7 +140,6 @@ function updateLocationSubscription() {
 var main = new UI.Card({
   title: "UV Alert",
   subtitle: "",
-  body: "Use the timeline to view alerts.",
   action: {
     select: 'images/select-location.png',
     up: 'images/info.png'
