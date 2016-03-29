@@ -8,11 +8,11 @@ var LOCATION_MAX_AGE = 60 * 60 * 24; // seconds
 
 var INFO_TEXT = [
   "UV index is a measure of the strength of sun's ultraviolet radiation.",
-  "UV index is 3 or above requires using protective clothing, wearing a ",
+  "UV index is 3 or above requires using protective clothing, wearing a",
   "wide-brimmed hat, UV-blocking sunglasses and SPF 30+ sunscreen.",
   "",
-  "Once you select your location, UV Alert will provide pins on the timeline ",
-  "each day to tell you when the UV level is 3 or above, and therefore you ",
+  "Once you select your location, UV Alert will provide pins on the timeline",
+  "each day to tell you when the UV level is 3 or above, and therefore you",
   "should protect yourself from the UV radiation.",
   "",
   "This program is free software: you can redistribute it and/or modify",
@@ -32,7 +32,7 @@ var INFO_TEXT = [
   "",
   "USA UV observations courtesy of EPA.",
   ""
-].join(" ").replace("\n\n");
+].join(" ").replace(/  /g, "\n\n");
 
 var ajax = require('ajax');
 var Settings = require('settings');
