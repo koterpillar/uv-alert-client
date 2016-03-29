@@ -28,7 +28,7 @@ def options(ctx):
 def concat_javascript(ctx, js_path=None):
     js_nodes = sum(
         (
-            ctx.path.ant_glob(js_path + '{path}/**/*.{ext}')
+            ctx.path.ant_glob('{}/**/*.{}'.format(path, ext))
             for path in (js_path, VENDOR_JS_PATH)
             for ext in ('js', 'json')
         ),
