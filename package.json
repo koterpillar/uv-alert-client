@@ -1,0 +1,36 @@
+{
+  "name": "uv-alert-client",
+  "version": "1.0.0",
+  "description": "UV Alert client for Pebble",
+  "main": "index.js",
+  "directories": {
+    "test": "test"
+  },
+  "dependencies": {
+    "bower": "^1.7.7",
+    "pulp": "^8.1.1",
+    "purescript": "^0.8.3",
+    "purescript-psa": "^0.3.5",
+    "purescript-webpack-plugin": "^0.2.0",
+    "purs-loader": "^0.6.0",
+    "source-map-loader": "^0.1.5"
+  },
+  "devDependencies": {},
+  "scripts": {
+    "build": "webpack --progress --colors --bail",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/koterpillar/uv-alert-client.git"
+  },
+  "author": {
+    "name": "Alexey Kotlyarov",
+    "email": "a@koterpillar.com"
+  },
+  "license": "GPL-3.0",
+  "bugs": {
+    "url": "https://github.com/koterpillar/uv-alert-client/issues"
+  },
+  "homepage": "https://github.com/koterpillar/uv-alert-client#readme"
+}
