@@ -7,6 +7,8 @@ import Control.Monad.Eff.Console (CONSOLE, log)
 
 import Data.Foldable (foldl)
 
+import Pebble.Ajax
+
 serverUrl :: String
 serverUrl = "https://uvalert.koterpillar.com"
 

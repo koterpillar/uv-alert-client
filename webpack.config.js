@@ -5,7 +5,8 @@ var PurescriptWebpackPlugin = require('purescript-webpack-plugin');
 
 var src = [
   'bower_components/purescript-*/src/**/*.purs',
-  'src/*.purs'
+  'src/**/*.purs',
+  'src/Pebble/*.js',
 ];
 
 var ffi = [
@@ -14,7 +15,8 @@ var ffi = [
 
 var modulesDirectories = [
   'node_modules',
-  'bower_components'
+  'bower_components',
+  'pebblejs/src/js/lib'
 ];
 
 var purescriptWebpackPlugin = new PurescriptWebpackPlugin({

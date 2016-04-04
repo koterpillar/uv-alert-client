@@ -7,3 +7,4 @@
 /.pulp-cache/
 /src/.webpack.js
 /src/js/app.js
+*.js.map
