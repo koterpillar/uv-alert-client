@@ -6,24 +6,28 @@ import Control.Monad.Aff (Aff)
 import Control.Monad.Eff (Eff)
 import Control.Monad.Eff.Class (liftEff)
 import Control.Monad.Eff.Console (CONSOLE, log)
+import Control.Monad.Eff.Exception (error)
+import Control.Monad.Error.Class (throwError)
 
-import Data.Date (Date, Now, fromEpochMilliseconds, now, toEpochMilliseconds)
+import Data.Date (Now)
 import Data.Time (Milliseconds(..))
 
 import Data.Either (Either(..))
 
 import Data.Foldable (foldl)
 
-import Data.Foreign (ForeignError(..))
-import Data.Foreign.Class (class IsForeign, readProp)
+import Data.Foreign.Class (read)
 
 import Data.Int (toNumber)
 
 import Data.Maybe (Maybe(..))
 
-import Network.HTTP.Affjax (AJAX)
+import Network.HTTP.Affjax (AJAX, get)
 
-import Pebble.Settings (SETTINGS, getOption)
+import Pebble.Settings (SETTINGS, getOption, setOption)
+
+import CachedSettings (getCachedOption, setCachedOption)
+import Location
 
 serverUrl :: String
 serverUrl = "https://uvalert.koterpillar.com"
@@ -60,41 +64,8 @@ infoText = foldl joinPara "" lines where
     joinPara l1 "" = l1 ++ "\n\n"
     joinPara l1 l2 = l1 ++ " " ++ l2
 
-data Location = Location String String String
-
-instance isForeignLocation :: IsForeign Location where
-    read value = Location <$> readProp "state" value
-                          <*> readProp "region" value
-                          <*> readProp "state" value
-
-data Cached a = Cached Date a
-
-instance isForeignCached :: IsForeign a => IsForeign (Cached a) where
-    read value = do
-        timestamp <- liftM1 (fromEpochMilliseconds <<< Milliseconds <<< toNumber) $ readProp "timestamp" value
-        case timestamp of
-             Just timestamp' -> do
-                                    dataVal <- readProp "data" value
-                                    return $ Cached timestamp' dataVal
-             Nothing -> Left (TypeMismatch "int" "undefined")
-
 locationMaxAge :: Milliseconds
 locationMaxAge = Milliseconds $ toNumber $ 1000 * 60 * 60 * 24
-
-isRecent :: forall e. Milliseconds -> Date -> Eff (now :: Now | e) Boolean
-isRecent maxAge timestamp = do
-    currentDate <- now
-    let age = toEpochMilliseconds currentDate - toEpochMilliseconds timestamp
-    return $ age <= maxAge
-
-getCachedOption :: forall a e. IsForeign a => Milliseconds -> String -> Eff (now :: Now, settings :: SETTINGS | e) (Maybe a)
-getCachedOption maxAge name = do
-    cached <- getOption name
-    case cached of
-         Right (Cached timestamp val) -> do
-             recent <- isRecent maxAge timestamp
-             return $ if recent then Just val else Nothing
-         Left _ -> return Nothing
 
 getLocationList :: forall e. Aff (now :: Now, ajax :: AJAX, settings :: SETTINGS | e) (Array Location)
 getLocationList = do
@@ -102,8 +73,20 @@ getLocationList = do
     case cached of
          Just cached' -> return cached'
          Nothing -> do
-             -- TODO
-             return []
+             resp <- get $ serverUrl ++ "/locations"
+             let locations = read resp.response
+             case locations of
+                  Left err -> throwError $ error $ show err
+                  Right locations' -> do
+                      liftEff $ setCachedOption "locations" locations'
+                      return locations'
+
+eitherToMaybe :: forall a b. Either b a -> Maybe a
+eitherToMaybe (Right v) = Just v
+eitherToMaybe _ = Nothing
+
+getLocation:: forall e. Eff (now :: Now, ajax :: AJAX, settings :: SETTINGS | e) (Maybe Location)
+getLocation = liftM1 eitherToMaybe $ getOption "location"
 
 main :: forall e. Eff (console :: CONSOLE | e) Unit
 main = do
