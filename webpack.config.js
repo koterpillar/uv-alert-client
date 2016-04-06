@@ -14,9 +14,10 @@ var ffi = [
 ];
 
 var modulesDirectories = [
+  '.',
   'node_modules',
   'bower_components',
-  'pebblejs/src/js/lib'
+  'pebblejs/src/js'
 ];
 
 var purescriptWebpackPlugin = new PurescriptWebpackPlugin({
@@ -45,6 +46,10 @@ var config = {
         loader: 'purs-loader'
       },
       {
+        test: /\.json$/,
+        loader: 'json-loader'
+      },
+      {
         test: /\.js$/,
         loader: 'source-map-loader',
         exclude: /node_modules|bower_components/
@@ -53,7 +58,7 @@ var config = {
   },
   resolve: {
     modulesDirectories: modulesDirectories,
-    extensions: [ '', '.js', '.purs']
+    extensions: [ '', '.js', '.json', '.purs']
   },
   plugins: [
     purescriptWebpackPlugin
