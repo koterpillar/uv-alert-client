@@ -25,6 +25,7 @@ import Data.Maybe (Maybe(..))
 import Network.HTTP.Affjax (AJAX, get)
 
 import Pebble.Settings (SETTINGS, getOption, setOption)
+import Pebble.Timeline (TIMELINE, setSubscriptions)
 
 import CachedSettings (getCachedOption, setCachedOption)
 import Location
@@ -85,8 +86,19 @@ eitherToMaybe :: forall a b. Either b a -> Maybe a
 eitherToMaybe (Right v) = Just v
 eitherToMaybe _ = Nothing
 
-getLocation:: forall e. Eff (now :: Now, ajax :: AJAX, settings :: SETTINGS | e) (Maybe Location)
+getLocation :: forall e. Eff (now :: Now, ajax :: AJAX, settings :: SETTINGS | e) (Maybe Location)
+-- TODO: handle old string value
 getLocation = liftM1 eitherToMaybe $ getOption "location"
+
+locTopic :: Location -> String
+locTopic loc = "v2-" ++ locState loc ++
+                    "-" ++ locRegion loc ++
+                    "-" ++ locCity loc
+
+setLocation :: forall e. Location -> Aff (settings :: SETTINGS, timeline :: TIMELINE | e) Unit
+setLocation loc = do
+    liftEff $ setOption "location" loc
+    setSubscriptions [locTopic loc]
 
 main :: forall e. Eff (console :: CONSOLE | e) Unit
 main = do

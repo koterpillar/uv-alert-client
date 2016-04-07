@@ -1,0 +1,6 @@
+{
+  "predef": [
+    "exports",
+    "Pebble"
+  ]
+}
