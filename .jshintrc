@@ -1,6 +1,7 @@
 {
   "predef": [
     "exports",
-    "Pebble"
+    "Pebble",
+    "require"
   ]
 }
