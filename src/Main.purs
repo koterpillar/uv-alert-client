@@ -26,6 +26,7 @@ import Network.HTTP.Affjax (AJAX, get)
 
 import Pebble.Settings (SETTINGS, getOption, setOption)
 import Pebble.Timeline (TIMELINE, setSubscriptions)
+import Pebble.UI (UI, defaultCardOptions, makeCard, windowShow)
 
 import CachedSettings (getCachedOption, setCachedOption)
 import Location
@@ -100,6 +101,9 @@ setLocation loc = do
     liftEff $ setOption "location" loc
     setSubscriptions [locTopic loc]
 
-main :: forall e. Eff (console :: CONSOLE | e) Unit
+main :: forall e. Eff (ui :: UI | e) Unit
 main = do
-    log infoText
+    mainCard <- makeCard $ defaultCardOptions { title = "UV Alert"
+                                              }
+    windowShow mainCard
+    return unit

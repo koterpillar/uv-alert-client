@@ -17,7 +17,8 @@ var modulesDirectories = [
   '.',
   'node_modules',
   'bower_components',
-  'pebblejs/src/js'
+  'pebblejs/src/js',
+  'pebblejs/src/js/lib'
 ];
 
 var purescriptWebpackPlugin = new PurescriptWebpackPlugin({
