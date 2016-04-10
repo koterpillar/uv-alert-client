@@ -7,6 +7,7 @@ var src = [
   'bower_components/purescript-*/src/**/*.purs',
   'src/**/*.purs',
   'src/Pebble/*.js',
+  'src/Pebble.js',
 ];
 
 var ffi = [

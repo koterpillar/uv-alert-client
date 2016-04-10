@@ -24,6 +24,7 @@ import Data.Maybe (Maybe(..))
 
 import Network.HTTP.Affjax (AJAX, get)
 
+import Pebble (PEBBLE, initPebble)
 import Pebble.Settings (SETTINGS, getOption, setOption)
 import Pebble.Timeline (TIMELINE, setSubscriptions)
 import Pebble.UI (UI, defaultCardOptions, makeCard, windowShow)
@@ -101,8 +102,9 @@ setLocation loc = do
     liftEff $ setOption "location" loc
     setSubscriptions [locTopic loc]
 
-main :: forall e. Eff (ui :: UI | e) Unit
+main :: forall e. Eff (pebble :: PEBBLE, ui :: UI | e) Unit
 main = do
+    initPebble
     mainCard <- makeCard $ defaultCardOptions { title = "UV Alert"
                                               }
     windowShow mainCard
