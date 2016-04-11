@@ -5,7 +5,6 @@ import Prelude
 import Control.Monad.Aff (Aff)
 import Control.Monad.Eff (Eff)
 import Control.Monad.Eff.Class (liftEff)
-import Control.Monad.Eff.Console (CONSOLE, log)
 import Control.Monad.Eff.Exception (error)
 import Control.Monad.Error.Class (throwError)
 
@@ -20,14 +19,23 @@ import Data.Foreign.Class (read)
 
 import Data.Int (toNumber)
 
+import Data.Map as M
+
 import Data.Maybe (Maybe(..))
+
+import Data.Tuple (Tuple(..))
 
 import Network.HTTP.Affjax (AJAX, get)
 
 import Pebble (PEBBLE, initPebble)
 import Pebble.Settings (SETTINGS, getOption, setOption)
 import Pebble.Timeline (TIMELINE, setSubscriptions)
-import Pebble.UI (UI, defaultCardOptions, makeCard, windowShow)
+import Pebble.UI ( UI
+                 , ActionButton(..)
+                 , Icon(..)
+                 , defaultCardOptions
+                 , makeCard
+                 , windowShow)
 
 import CachedSettings (getCachedOption, setCachedOption)
 import Location
@@ -105,7 +113,11 @@ setLocation loc = do
 main :: forall e. Eff (pebble :: PEBBLE, ui :: UI | e) Unit
 main = do
     initPebble
+    let mainActions = M.fromFoldable [ Tuple Select (Icon "images/select-location.png")
+                                     , Tuple Up (Icon "images/info.png")
+                                     ]
     mainCard <- makeCard $ defaultCardOptions { title = "UV Alert"
+                                              , actions = mainActions
                                               }
     windowShow mainCard
     return unit

@@ -18,6 +18,8 @@
     "purescript-affjax": "^0.13.0",
     "purescript-datetime": "^0.9.2",
     "purescript-exceptions": "^0.3.4",
-    "purescript-sets": "^0.5.7"
+    "purescript-sets": "^0.5.7",
+    "purescript-tuples": "^0.4.0",
+    "purescript-generics": "^0.7.2"
   }
 }

@@ -4,6 +4,8 @@
 
 var UI = require('ui');
 
+exports._null = null;
+
 exports._makeCard = function (options) {
   return function () {
     var options_ = {};
@@ -12,12 +14,6 @@ exports._makeCard = function (options) {
             options_[opt] = options[opt];
         }
     }
-    // FIXME: icon, subicon, banner, style, actions are wrong
-    options_.icon = null;
-    options_.subicon = null;
-    options_.banner = null;
-    options_.style = "small";
-    options_.actions = {};
     return new UI.Card(options_);
   };
 };
