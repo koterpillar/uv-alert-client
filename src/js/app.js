@@ -30,6 +30,9 @@ var INFO_TEXT = [
   "",
   "Australian UV observations courtesy of ARPANSA.",
   "",
+  "Japan UV observations courtesy of Japan Meteorological Agency website",
+  "http://www.jma.go.jp/en/uv/",
+  "",
   "USA UV observations courtesy of EPA.",
   ""
 ].join(" ").replace(/  /g, "\n\n");

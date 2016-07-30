@@ -13,9 +13,6 @@ the watch timeline.
 To select your location, open the application and press the middle button, then
 choose the city from the list.
 
-The data currently comes from Australia's Buerau of Meteorology, so is limited
-to the locations available on http://www.bom.gov.au/uv/data.shtml.
-
 License
 -------
 
