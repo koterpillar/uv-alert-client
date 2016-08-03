@@ -82,6 +82,7 @@ function getLocation(callback) {
       for (var i = 0; i < locations.length; i++) {
         if (locations[i].city == loc) {
           callback(locations[i]);
+          return;
         }
       }
       callback(null);
