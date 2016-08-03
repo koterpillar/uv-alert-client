@@ -77,10 +77,26 @@ function getLocationList(callback) {
 function getLocation(callback) {
   var loc = Settings.option('location');
   if (typeof(loc) == 'string') {
-    // Old location, find it in the location list and replace
+    // Old location (v1, Australian city), find it in the location list and
+    // replace
     getLocationList(function (locations) {
       for (var i = 0; i < locations.length; i++) {
         if (locations[i].city == loc) {
+          callback(locations[i]);
+          return;
+        }
+      }
+      callback(null);
+    });
+  } else if (!('id' in loc)) {
+    // Old location without the ID, find it in the location list and replace
+    getLocationList(function (locations) {
+      for (var i = 0; i < locations.length; i++) {
+        if (
+          locations[i].city == loc.city &&
+          locations[i].region == loc.region &&
+          locations[i].country == loc.country
+        ) {
           callback(locations[i]);
           return;
         }
@@ -106,19 +122,12 @@ function setLocation(value) {
   main.subtitle(locationTitle(value));
 }
 
-function locationEqual(loc1, loc2) {
-  return loc1.country == loc2.country &&
-    loc1.region == loc2.region &&
-    loc1.city == loc2.city;
-}
-
 function updateLocationSubscription() {
   getLocation(function (loc) {
     if (!loc) {
       return;
     }
-    var locTopic = "v2-" + loc.country + "-" + loc.region + "-" + loc.city;
-    locTopic = locTopic.replace(/ /g, "_");
+    var locTopic = "v2-" + loc.id;
     Pebble.timelineSubscriptions(
       function (topics) {
         var haveSubscription = false;
