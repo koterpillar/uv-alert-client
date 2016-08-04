@@ -88,7 +88,7 @@ function getLocation(callback) {
       }
       callback(null);
     });
-  } else if (!('id' in loc)) {
+  } else if (loc && loc.city && !('id' in loc)) {
     // Old location without the ID, find it in the location list and replace
     getLocationList(function (locations) {
       for (var i = 0; i < locations.length; i++) {
