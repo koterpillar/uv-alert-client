@@ -40,6 +40,7 @@ var INFO_TEXT = [
 var ajax = require('ajax');
 var Settings = require('settings');
 var UI = require('ui');
+var appinfo = require('appinfo');
 
 function pass() {}
 
@@ -58,7 +59,7 @@ function getLocationList(callback) {
   } else {
     ajax(
       {
-        url: SERVER_URL + '/locations',
+        url: SERVER_URL + '/locations?version=' + appinfo.versionLabel,
         type: 'json'
       },
       function (data, status_, request) {
